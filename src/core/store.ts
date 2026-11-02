@@ -1,11 +1,12 @@
 import type { Session } from "./session";
 
-const url = () => process.env.UPSTASH_REDIS_REST_URL;
-const hasRedis = () => Boolean(url() && process.env.UPSTASH_REDIS_REST_TOKEN);
+const url = () => process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const token = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+const hasRedis = () => Boolean(url() && token());
 export const storeShared = hasRedis;
 
 async function redis(...cmd: (string | number)[]) {
-  const r = await fetch(url()!, { method: "POST", headers: { authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` }, body: JSON.stringify(cmd), cache: "no-store" });
+  const r = await fetch(url()!, { method: "POST", headers: { authorization: `Bearer ${token()}` }, body: JSON.stringify(cmd), cache: "no-store" });
   if (!r.ok) throw new Error(`Store returned ${r.status}`);
   return (await r.json()).result;
 }
