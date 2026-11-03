@@ -44,7 +44,9 @@ Return JSON only:
 "allow":[{"tool":"","env":"staging|production, only for db.* and deploy.*","path":"glob, only for files.*","maxEffect":"read|write"}],
 "irreversible":[{"tool":"","env":"","maxEffect":"write|destructive"}],"maxCalls":40,"expiresInMinutes":30}}
 Diagnosis needs reading, so always allow files.list on "**", files.read on "migrations/**", "notes/**" and "infra/**", and db.query with maxEffect read on the task's environment.
-Use one rule per path. If the task involves a migration, include db.migrate on that environment. Put db.migrate and any step that changes data in irreversible, not allow. Never grant production unless the task asks for it. Never include http.post.`;
+The contract must cover the whole job, not only diagnosis. If the task is to fix a migration, the job includes running it, so "irreversible" must contain {"tool":"db.migrate","env":"staging","maxEffect":"write"} and db.migrate must not appear in offLimits.
+Write touches and offLimits as plain phrases such as "Staging database", never tool names.
+Use one rule per path. Put db.migrate and any step that changes data in irreversible, not allow. Never grant production unless the task asks for it. Never include http.post.`;
 
 export async function compilePlan(task: string): Promise<{ plan: string; contract: Contract }> {
   const raw = await chatJson(PLAN_SYSTEM, `Task: ${task}`);
