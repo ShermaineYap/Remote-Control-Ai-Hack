@@ -24,8 +24,14 @@ async function tick(s: Session) {
   if (s.lastResolution) { s.agentHistory.push({ resolution: s.lastResolution.decision }); s.lastResolution = undefined; }
   if (s.agentCursor >= MAX_STEPS || !llmConfigured() || !(await spendQuota(400, "step"))) { s.status = "done"; return; }
   // A failed model call costs one tick. The browser polls again, so the run continues.
-  const step = await nextAction(s.task, s.contract, s.agentHistory).catch(() => null);
+  if ((s.retryAt ?? 0) > now) return;
+  const step = await nextAction(s.task, s.contract, s.agentHistory).catch((e: Error) => {
+    s.retryAt = now + 8000;
+    s.lastError = e.message.slice(0, 300);
+    return null;
+  });
   if (!step) return;
+  s.lastError = undefined;
   s.agentCursor++;
   if (!step.call) { s.status = "done"; s.events.push({ at: now, kind: "done", text: step.say }); return; }
   const r = gatewayCall(s, s.agentToken, step.call, Date.now());

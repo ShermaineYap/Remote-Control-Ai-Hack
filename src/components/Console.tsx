@@ -18,7 +18,7 @@ export function Console({ s, say }: { s: PublicSession; say?: string }) {
           </div>
         ))}
       </div>
-      {say && <p className="say">Agent: {say}</p>}
+      {s.lastError ? <p className="say">The AI service is busy. The agent will retry in a few seconds.</p> : say && <p className="say">Agent: {say}</p>}
       <ol className="log" aria-live="polite">
         {[...s.events].reverse().slice(0, 14).map((e, i) => (
           <li key={s.events.length - i} className={TONE[e.kind] ?? ""}><b>{WHEN[e.kind] ?? e.kind}</b><span>{e.text}</span></li>

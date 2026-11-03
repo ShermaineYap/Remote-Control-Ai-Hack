@@ -18,6 +18,7 @@ export interface Session {
   pending?: Pending; lastResolution?: Resolution; holdUntil: number;
   events: BrekEvent[]; sandbox: Sandbox;
   agentCursor: number; agentHistory: unknown[];
+  retryAt?: number; lastError?: string;
 }
 
 export const HOLD_LEASE_MS = 2500;
