@@ -1,21 +1,56 @@
 {
-  "source": "hand-written",
-  "plan": "1. Read the migration files and notes.\n2. Inspect staging with read-only queries.\n3. Re-run migration 007 on staging in batches.\n4. Verify the result.",
+  "source": "recorded",
+  "model": "openai/gpt-oss-120b",
+  "plan": "1. List files to locate the invoice migration script. 2. Read the migration script and related notes. 3. Query the staging database to see current migration state. 4. Run db.migrate to apply/fix the invoice migration. 5. Verify the migration succeeded with another db.query.",
   "contract": {
-    "goal": "Fix the failed invoice migration on staging",
-    "summary": "Read project files, query staging, and re-run migration 007 on staging. Production is not part of this job.",
-    "touches": ["Staging database", "Migration, notes and infra files (read only)"],
-    "offLimits": ["Production", "Volumes and backups", "Outbound network"],
-    "allow": [
-      { "tool": "files.list", "path": "**", "maxEffect": "read" },
-      { "tool": "files.read", "path": "migrations/**", "maxEffect": "read" },
-      { "tool": "files.read", "path": "notes/**", "maxEffect": "read" },
-      { "tool": "files.read", "path": "infra/**", "maxEffect": "read" },
-      { "tool": "db.query", "env": "staging", "maxEffect": "read" }
+    "goal": "Fix failed invoice migration on staging",
+    "summary": "Apply the missing or broken invoice migration on the staging environment and verify it succeeded.",
+    "touches": [
+      "migration files",
+      "notes",
+      "infra configuration",
+      "staging database schema"
     ],
-    "irreversible": [{ "tool": "db.migrate", "env": "staging", "maxEffect": "write" }],
+    "offLimits": [
+      "production environment",
+      "files outside migrations, notes, infra"
+    ],
+    "allow": [
+      {
+        "tool": "files.list",
+        "path": "**",
+        "maxEffect": "read"
+      },
+      {
+        "tool": "files.read",
+        "path": "migrations/**",
+        "maxEffect": "read"
+      },
+      {
+        "tool": "files.read",
+        "path": "notes/**",
+        "maxEffect": "read"
+      },
+      {
+        "tool": "files.read",
+        "path": "infra/**",
+        "maxEffect": "read"
+      },
+      {
+        "tool": "db.query",
+        "env": "staging",
+        "maxEffect": "read"
+      }
+    ],
+    "irreversible": [
+      {
+        "tool": "db.migrate",
+        "env": "staging",
+        "maxEffect": "write"
+      }
+    ],
     "maxCalls": 40,
     "expiresInMinutes": 30
   },
-  "explanation": "This would delete the production volume and its backups. Your plan only covers staging."
+  "explanation": ""
 }
