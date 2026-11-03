@@ -131,7 +131,13 @@ export function checkCall(contract: Contract, call: ToolCall): Verdict {
 // Hardens a contract proposed by the LLM. The model may propose, but it cannot widen these limits.
 export function hardenContract(input: unknown): Contract {
   const c = (input ?? {}) as Partial<Contract>;
-  const clean = (rules: unknown): Rule[] => (Array.isArray(rules) ? rules : []).flatMap((r): Rule[] => {
+  // Models sometimes write "a/*,b/*" as one path. Split it so each glob is checked on its own.
+  const splitPaths = (rules: unknown): unknown[] => (Array.isArray(rules) ? rules : []).flatMap((r) => {
+    const x = r as Rule;
+    return typeof x?.path === "string" && x.path.includes(",")
+      ? x.path.split(",").map((p) => ({ ...x, path: p.trim() })).filter((y) => y.path) : [r];
+  });
+  const clean = (rules: unknown): Rule[] => splitPaths(rules).flatMap((r): Rule[] => {
     const x = r as Rule;
     const def = KNOWN_TOOLS[x?.tool];
     if (!def) return [];
@@ -148,8 +154,8 @@ export function hardenContract(input: unknown): Contract {
   });
   const allow: Rule[] = [], irreversible = clean(c.irreversible);
   for (const r of clean(c.allow)) {
-    // Destructive rights never land in the silent list, whatever the model says.
-    if (r.maxEffect === "destructive" || r.tool === "volume.delete") irreversible.push(r);
+    // Destructive rights and migrations never land in the silent list, whatever the model says.
+    if (r.maxEffect === "destructive" || r.tool === "volume.delete" || r.tool === "db.migrate") irreversible.push(r);
     else allow.push(r);
   }
   const text = (v: unknown, n = 240) => String(v ?? "").slice(0, n);

@@ -37,6 +37,18 @@ describe("helpers", () => {
   });
 });
 
+describe("hardening real model mistakes", () => {
+  it("splits comma-joined paths", () => {
+    const c = hardenContract({ allow: [{ tool: "files.read", path: "migrations/*,notes/*" }] });
+    expect(c.allow.map((r) => r.path)).toEqual(["migrations/*", "notes/*"]);
+  });
+  it("moves migrations out of the silent list", () => {
+    const c = hardenContract({ allow: [{ tool: "db.migrate", env: "staging", maxEffect: "write" }] });
+    expect(c.allow).toEqual([]);
+    expect(c.irreversible[0].tool).toBe("db.migrate");
+  });
+});
+
 describe("gateway", () => {
   const go = () => { const s = createSession("t", "p", contract, 0, "id"); return s; };
   const read = { tool: "files.read", args: { path: "migrations/a" } };

@@ -29,7 +29,8 @@ Return JSON only:
 {"plan":"numbered steps","contract":{"goal":"","summary":"one or two plain sentences","touches":["plain phrases"],"offLimits":["plain phrases"],
 "allow":[{"tool":"","env":"staging|production, only for db.* and deploy.*","path":"glob, only for files.*","maxEffect":"read|write"}],
 "irreversible":[{"tool":"","env":"","maxEffect":"write|destructive"}],"maxCalls":40,"expiresInMinutes":30}}
-Put steps that change data in irreversible. Never grant production unless the task asks for it. Never include http.post.`;
+Diagnosis needs reading, so always allow files.list on "**", files.read on "migrations/**", "notes/**" and "infra/**", and db.query with maxEffect read on the task's environment.
+Use one rule per path. Put db.migrate and any step that changes data in irreversible, not allow. Never grant production unless the task asks for it. Never include http.post.`;
 
 export async function compilePlan(task: string): Promise<{ plan: string; contract: Contract }> {
   const raw = JSON.parse(await chat(PLAN_SYSTEM, `Task: ${task}`, true));
