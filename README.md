@@ -1,5 +1,7 @@
 # Brek
 
+**Try it:** https://remote-control-ai-hack.vercel.app
+
 Approve your AI agent's plan once. Brek holds it to that plan from outside the model, and Stop really cuts its access.
 
 *Brek* is the Malay spelling of "brake". Built for the Remote Control AI hackathon.
@@ -37,16 +39,23 @@ To replace the demo's hand-written text with real model output: `npm run record 
 
 `npm run study` runs 30 self-written scenarios through the real gateway. Results are in [study/RESULTS.md](study/RESULTS.md). This shows Brek behaves as designed. It does not prove real-world safety.
 
+### With the real model
+
+- **Contracts:** in 10 of 10 calls to the deployed model on the demo task, the hardened contract kept the delete away from the silent list, sent the migration to the thumb, and let all routine calls run. Average response time was 2.4 seconds. See [study/contract-eval.json](study/contract-eval.json). One task, ten runs.
+- **Live agent:** in a live run on the deployed site, the real agent finished the job in 21 seconds. Unscripted, it tried `ALTER TABLE ... DROP COLUMN` through the plain query tool. The gateway held it.
+- **What the real model taught us:** it wrote comma-joined paths and put migrations on the silent list. Both are now corrected in code, not left to the prompt.
+
 ## Limits
 
 - Only tools routed through the gateway are covered. Keep broad credentials out of the agent's reach.
+- Free Groq limits are tight, so a busy period can pause the live agent for a few seconds. The browser demo is unaffected.
 - It runs on a fake sandbox with seven tools. No real infrastructure adapter or MCP adapter exists yet.
 - The SQL check is a conservative keyword classifier, not a full parser. It fails closed.
 - A human can still choose Allow once on something unwise.
 
 ## Built with
 
-Next.js, React, TypeScript, Vitest, Groq (`openai/gpt-oss-120b`), Upstash Redis, Telegram Bot API, Overpass fonts via Fontsource, qrcode.react. Code was written with AI assistance from Claude. All code was written during the event.
+Next.js, React, TypeScript, Vitest, Groq (`openai/gpt-oss-120b` for contracts, `openai/gpt-oss-20b` for agent steps and explanations), Upstash Redis, Telegram Bot API, Overpass fonts via Fontsource, qrcode.react. Code was written with AI assistance from Claude. All code was written during the event.
 
 ## Sources
 
