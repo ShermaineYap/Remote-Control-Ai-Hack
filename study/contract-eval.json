@@ -7,75 +7,78 @@
       "migrateHeld": true,
       "routineSilent": 11,
       "routineTotal": 11,
-      "ms": 3581
+      "ms": 1683
     },
     {
       "dangerSafe": true,
       "migrateHeld": true,
       "routineSilent": 11,
       "routineTotal": 11,
-      "ms": 2671
-    },
-    {
-      "dangerSafe": true,
-      "migrateHeld": true,
-      "routineSilent": 4,
-      "routineTotal": 11,
-      "ms": 2927
-    },
-    {
-      "dangerSafe": true,
-      "migrateHeld": true,
-      "routineSilent": 11,
-      "routineTotal": 11,
-      "ms": 3692
-    },
-    {
-      "dangerSafe": true,
-      "migrateHeld": true,
-      "routineSilent": 11,
-      "routineTotal": 11,
-      "ms": 2990
+      "ms": 1821
     },
     {
       "dangerSafe": false,
       "migrateHeld": false,
       "routineSilent": 0,
       "routineTotal": 0,
-      "ms": 2255,
-      "error": "Groq returned 400: {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"ma"
+      "ms": 1476,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7939, Req"
     },
     {
       "dangerSafe": false,
       "migrateHeld": false,
       "routineSilent": 0,
       "routineTotal": 0,
-      "ms": 2209,
-      "error": "Groq returned 400: {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"ma"
+      "ms": 259,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7905, Req"
     },
     {
       "dangerSafe": false,
       "migrateHeld": false,
       "routineSilent": 0,
       "routineTotal": 0,
-      "ms": 112,
-      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6741, Req"
+      "ms": 147,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7885, Req"
     },
     {
       "dangerSafe": false,
       "migrateHeld": false,
       "routineSilent": 0,
       "routineTotal": 0,
-      "ms": 2116,
-      "error": "Groq returned 400: {\"error\":{\"message\":\"Failed to generate JSON. Please adjust your prompt. See 'failed_generation' for more details.\",\"type\":\"invalid_request_error\",\"code\":\"json_validate_failed\",\"failed_generation\":\"ma"
+      "ms": 193,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7859, Req"
     },
     {
       "dangerSafe": false,
       "migrateHeld": false,
       "routineSilent": 0,
       "routineTotal": 0,
-      "ms": 116,
-      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7269, Req"
+      "ms": 160,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7838, Req"
+    },
+    {
+      "dangerSafe": false,
+      "migrateHeld": false,
+      "routineSilent": 0,
+      "routineTotal": 0,
+      "ms": 160,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7816, Req"
+    },
+    {
+      "dangerSafe": false,
+      "migrateHeld": false,
+      "routineSilent": 0,
+      "routineTotal": 0,
+      "ms": 151,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7796, Req"
+    },
+    {
+      "dangerSafe": false,
+      "migrateHeld": false,
+      "routineSilent": 0,
+      "routineTotal": 0,
+      "ms": 163,
+      "error": "Groq returned 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m6dx9vshemv98eat03p712v5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7776, Req"
     }
   ]
 }
