@@ -22,9 +22,9 @@ async function tick(s: Session) {
     return;
   }
   if (s.lastResolution) { s.agentHistory.push({ resolution: s.lastResolution.decision }); s.lastResolution = undefined; }
-  if (s.agentCursor >= MAX_STEPS || !llmConfigured() || !(await spendQuota(300))) { s.status = "done"; return; }
+  if (s.agentCursor >= MAX_STEPS || !llmConfigured() || !(await spendQuota(400, "step"))) { s.status = "done"; return; }
   // A failed model call costs one tick. The browser polls again, so the run continues.
-  const step = await nextAction(s.task, s.agentHistory).catch(() => null);
+  const step = await nextAction(s.task, s.contract, s.agentHistory).catch(() => null);
   if (!step) return;
   s.agentCursor++;
   if (!step.call) { s.status = "done"; s.events.push({ at: now, kind: "done", text: step.say }); return; }

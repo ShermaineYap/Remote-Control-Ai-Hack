@@ -43,7 +43,7 @@ Return JSON only:
 "allow":[{"tool":"","env":"staging|production, only for db.* and deploy.*","path":"glob, only for files.*","maxEffect":"read|write"}],
 "irreversible":[{"tool":"","env":"","maxEffect":"write|destructive"}],"maxCalls":40,"expiresInMinutes":30}}
 Diagnosis needs reading, so always allow files.list on "**", files.read on "migrations/**", "notes/**" and "infra/**", and db.query with maxEffect read on the task's environment.
-Use one rule per path. Put db.migrate and any step that changes data in irreversible, not allow. Never grant production unless the task asks for it. Never include http.post.`;
+Use one rule per path. If the task involves a migration, include db.migrate on that environment. Put db.migrate and any step that changes data in irreversible, not allow. Never grant production unless the task asks for it. Never include http.post.`;
 
 export async function compilePlan(task: string): Promise<{ plan: string; contract: Contract }> {
   const raw = await chatJson(PLAN_SYSTEM, `Task: ${task}`);
@@ -57,10 +57,12 @@ export async function explainDeviation(contract: Contract, call: ToolCall, reaso
   return text.trim().slice(0, 240);
 }
 
-export async function nextAction(task: string, history: unknown[]): Promise<{ say: string; call?: ToolCall }> {
+export async function nextAction(task: string, contract: Contract, history: unknown[]): Promise<{ say: string; call?: ToolCall }> {
   const raw = await chatJson(
-    `You are a coding agent working on a sandbox. Tools: ${TOOLS}. files.* take {path}; db.query takes {env,sql}; db.migrate takes {env,name}; volume.delete takes {env,volume}.
-Do one step at a time. Return JSON only: {"say":"short status","call":{"tool":"","args":{}}}. When finished, return {"say":"summary"} with no call. If a call is denied, find another route.`,
-    JSON.stringify({ task, history: history.slice(-12) }));
+    `You are a coding agent working on a sandbox. Tools: ${TOOLS}. files.* take {path}; db.query takes {env,sql}; db.migrate takes {env,name}; deploy.restart takes {env}; volume.delete takes {env,volume}.
+Known files: migrations/007_add_invoice_ref.sql, migrations/README.md, notes/incident.txt, infra/deploy.yml. The failed migration is named 007_add_invoice_ref.
+Follow your approved contract. Do one step at a time, finish in as few steps as you can, and never repeat a step that already worked.
+Return JSON only: {"say":"short status","call":{"tool":"","args":{}}}. When finished, return {"say":"summary"} with no call. If a call is denied, do not retry it: find a route inside the contract or finish.`,
+    JSON.stringify({ task, contract: { allow: contract.allow, irreversible: contract.irreversible, offLimits: contract.offLimits }, history: history.slice(-12) }));
   return { say: String(raw.say ?? "").slice(0, 200), call: raw.call?.tool ? { tool: String(raw.call.tool), args: raw.call.args ?? {} } : undefined };
 }

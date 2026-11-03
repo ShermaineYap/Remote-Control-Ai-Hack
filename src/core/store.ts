@@ -45,9 +45,9 @@ export async function updateSession<T>(id: string, fn: (s: Session) => T | Promi
 }
 
 // Daily cap so a public link can't burn the free LLM quota.
-export async function spendQuota(limit: number): Promise<boolean> {
+export async function spendQuota(limit: number, bucket: "session" | "step" = "session"): Promise<boolean> {
   if (!hasRedis()) return true;
-  const key = `q:${new Date().toISOString().slice(0, 10)}`;
+  const key = `q:${bucket}:${new Date().toISOString().slice(0, 10)}`;
   const n = await redis("INCR", key);
   if (n === 1) await redis("EXPIRE", key, 90000);
   return n <= limit;
